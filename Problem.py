@@ -33,6 +33,18 @@ class Problem:
                     child.append(s)
         return child
 
+    def successor_ucs(self, state: State) -> list:
+        child = []
+        for i in range(len(state.pipes)):
+            for j in range(len(state.pipes)):
+                if i == j:
+                    continue
+                if not state.pipes[j].is_full() and not state.pipes[i].is_empty():
+                    s = State(copy.deepcopy(state.pipes), state, self.get_cost_from_change_ucs(state, i, j), (i, j))
+                    s.change_between_two_pipe(i, j)
+                    child.append(s)
+        return child
+
     @staticmethod
     def print_state(state: State):
         for i in state.pipes:
@@ -55,6 +67,11 @@ class Problem:
             return state.g_n + self.path_cost[2]
         elif state.pipes[pipe_src_ind].stack[-1] == 'yellow':
             return state.g_n + self.path_cost[3]
+
+    @staticmethod
+    def get_cost_from_change_ucs(state: State, pipe_src_ind: int, pipe_dest_ind: int) -> int:
+        cost = abs(pipe_dest_ind - pipe_src_ind)
+        return state.g_n + cost
 
     def set_path_cost(self, cost: list):
         self.path_cost = cost
