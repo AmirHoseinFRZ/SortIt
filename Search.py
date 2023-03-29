@@ -42,24 +42,30 @@ class Search:
         start_time = datetime.now()
         queue = []
         state = prb.initState
-        print(len(state.pipes))
+        print(state.h_n)
+        for p in state.pipes:
+            print(p.color)
+            print(p.stack)
+
         for i in state.pipes:
             i.print_pipe()
-        print(0)
         queue.append(state)
-        max = 0
+        min = 20
         while len(queue) > 0:
-            # print(list(map(lambda s: s.h_n + s.g_n, queue)), len(queue))
             queue.sort(key=lambda st: st.h_n + st.g_n)
-            # if len(queue) > 500:
-            #     print(list(map(lambda s: s.h_n, queue)), len(queue))
-            #     break
             state = queue.pop(0)
-            if state.g_n > max:
-                max = state.g_n
-                print(max)
-            # print(state.g_n)
+            if prb.is_goal(state):
+                print(state.g_n)
+                return Solution(state, prb, start_time)
+            # if state.h_n < min:
+            #     min = state.h_n
+            #     print(min)
             neighbors = prb.successor(state)
+            # for s in neighbors:
+            #     print(s.h_n)
+            #     for p in s.pipes:
+            #         print(p.color)
+            #         print(p.stack)
             for c in neighbors:
                 if prb.is_goal(c):
                     print(c.g_n)

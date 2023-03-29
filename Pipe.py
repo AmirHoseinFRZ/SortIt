@@ -8,15 +8,12 @@ class Pipe:
     def get_color(self):
         max_color = None
         maxx = 0
-        colors = []
         for c in ['red', 'blue', 'green', 'yellow']:
             if self.stack.count(c) > maxx:
-                max = self.stack.count(c)
+                maxx = self.stack.count(c)
                 max_color = c
         self.maximum_same_ball_color = maxx
         return max_color
-
-
 
     def is_one_color(self) -> bool:  # this function checks that all balls are the same color
         for i in range(1, len(self.stack)):
