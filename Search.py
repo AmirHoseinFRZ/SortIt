@@ -15,7 +15,6 @@ class Search:
             neighbors = prb.successor(state)
             for c in neighbors:
                 if prb.is_goal(c):
-                    print(c)
                     return Solution(c, prb, start_time)
                 queue.append(c)
         return None
@@ -37,4 +36,35 @@ class Search:
                     return Solution(c, prb, start_time)
                 queue.append(c)
         return None
+
+    @staticmethod
+    def a_star(prb: Problem) -> Solution:
+        start_time = datetime.now()
+        queue = []
+        state = prb.initState
+        print(len(state.pipes))
+        for i in state.pipes:
+            i.print_pipe()
+        print(0)
+        queue.append(state)
+        max = 0
+        while len(queue) > 0:
+            # print(list(map(lambda s: s.h_n + s.g_n, queue)), len(queue))
+            queue.sort(key=lambda st: st.h_n + st.g_n)
+            # if len(queue) > 500:
+            #     print(list(map(lambda s: s.h_n, queue)), len(queue))
+            #     break
+            state = queue.pop(0)
+            if state.g_n > max:
+                max = state.g_n
+                print(max)
+            # print(state.g_n)
+            neighbors = prb.successor(state)
+            for c in neighbors:
+                if prb.is_goal(c):
+                    print(c.g_n)
+                    return Solution(c, prb, start_time)
+                queue.append(c)
+        return None
+
 

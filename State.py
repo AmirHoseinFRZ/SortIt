@@ -5,6 +5,7 @@ class State:
         self.parent = parent
         self.g_n = g_n
         self.prev_action = prev_action
+        self.h_n = self.get_h_n()
 
     def change_between_two_pipe(self, pipe_src_ind: int, pipe_dest_ind: int):
         self.pipes[pipe_dest_ind].add_ball(self.pipes[pipe_src_ind].remove_ball())
@@ -18,3 +19,19 @@ class State:
         for i in hash_strings:
             hash_string += i + '###'
         return hash_string
+
+    def get_h_n(self):
+        h = 0
+        is_same = True
+        for pipe in self.pipes:
+            if len(pipe.stack) >= 2:
+                for i in range(len(pipe.stack) - 1):
+                    if is_same:
+                        if pipe.stack[i] != pipe.stack[i + 1]:
+                            is_same = False
+                            h += 1
+                    else:
+                        h += 1
+            elif len(pipe.stack) == 1:
+                h += 1
+        return h
