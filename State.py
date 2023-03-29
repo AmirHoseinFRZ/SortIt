@@ -2,6 +2,7 @@
 class State:
     def __init__(self, pipes: list, parent, g_n: int, prev_action: tuple):
         self.pipes = pipes
+        self.pipes.sort(key=lambda pipe: pipe.maximum_same_ball_color)
         self.parent = parent
         self.g_n = g_n
         self.prev_action = prev_action
@@ -22,16 +23,22 @@ class State:
 
     def get_h_n(self):
         h = 0
-        is_same = True
+        colors = {'red': 0, 'blue': 0, 'green': 0, 'yellow': 0}
         for pipe in self.pipes:
-            if len(pipe.stack) >= 2:
-                for i in range(len(pipe.stack) - 1):
-                    if is_same:
-                        if pipe.stack[i] != pipe.stack[i + 1]:
-                            is_same = False
-                            h += 1
-                    else:
-                        h += 1
-            elif len(pipe.stack) == 1:
-                h += 1
+            for ball in pipe.stack:
+                colors[ball] += 1
+        number_of_balls = sum(colors.values())
+        # for i in range(number_of_balls / self.pipes[0].limit):
+        for color in colors:
+            for pipe in self.pipes:
+                if pipe.color == color:
+                    colors[color] -= pipe.maximum_same_ball_color
+                    if colors[color] == 0:
+                        break
+                else:
+                    for ball in range(len(pipe.stack)):
+                        if pipe.stack[ball] == color:
+                            colors[color] -= 1
+                            h += len(pipe.stack) - ball
         return h
+
