@@ -46,20 +46,23 @@ class Search:
         for p in state.pipes:
             print(p.color)
             print(p.stack)
-
         for i in state.pipes:
             i.print_pipe()
         queue.append(state)
         min = 20
         while len(queue) > 0:
-            queue.sort(key=lambda st: st.h_n + st.g_n)
+            queue.sort(key=lambda st: st.h_n)
             state = queue.pop(0)
             if prb.is_goal(state):
                 print(state.g_n)
                 return Solution(state, prb, start_time)
-            # if state.h_n < min:
-            #     min = state.h_n
-            #     print(min)
+            if state.h_n < min:
+                min = state.h_n
+                print(state.h_n)
+                print(state.get_h_n())
+                for p in state.pipes:
+                    # print(p.color)
+                    print(p.stack)
             neighbors = prb.successor(state)
             # for s in neighbors:
             #     print(s.h_n)
