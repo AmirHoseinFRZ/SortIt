@@ -4,7 +4,7 @@ from State import State
 from Search import Search
 
 if __name__ == '__main__':
-    test_path = 'tests/test4.txt'
+    test_path = 'tests/test3.txt'
     file = open(test_path, 'r')
     p = []
     for i in file.readlines():
@@ -15,4 +15,4 @@ if __name__ == '__main__':
 
     s = Search.a_star(Problem(State(p, None, 0, (0, 0))))
     s.print_path()
-    # s.execute_gui()
+    s.execute_gui()

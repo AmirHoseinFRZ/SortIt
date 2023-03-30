@@ -45,6 +45,17 @@ class Problem:
                     child.append(s)
         return child
 
+    def successor_a_star(self, state: State) -> list:
+        child = []
+        for i in range(len(state.pipes)):
+            for j in range(len(state.pipes)):
+                if i == j:
+                    continue
+                if not state.pipes[j].is_full() and not state.pipes[i].is_empty():
+                    s = State(copy.deepcopy(state.pipes), state, self.get_cost_from_change_a_star(state, i, j), (i, j))
+                    s.change_between_two_pipe(i, j)
+                    child.append(s)
+        return child
     @staticmethod
     def print_state(state: State):
         for i in state.pipes:
@@ -72,6 +83,34 @@ class Problem:
     def get_cost_from_change_ucs(state: State, pipe_src_ind: int, pipe_dest_ind: int) -> int:
         cost = abs(pipe_dest_ind - pipe_src_ind)
         return state.g_n + cost
+
+    @staticmethod
+    def get_cost_from_change_a_star(state: State, pipe_src_ind: int, pipe_dest_ind: int):
+        src_pipe = state.pipes[pipe_src_ind]
+        des_pipe = state.pipes[pipe_dest_ind]
+        if src_pipe.color is None:
+            if src_pipe.stack[-1] == des_pipe.color:
+                if des_pipe.is_one_color():
+                    return state.g_n - 2
+                else:
+                    for ball_ind in range(len(des_pipe.stack) - 1, -1, -1):
+                        if des_pipe.stack[ball_ind] != des_pipe.color:
+                            return state.g_n + len(des_pipe.stack) - ball_ind + 1
+            else:
+                return state.g_n + 1
+        else:
+            if src_pipe.is_one_color():
+                return state.g_n + float('+inf')
+            else:
+                if src_pipe.stack[-1] == des_pipe.color:
+                    if des_pipe.is_one_color():
+                        return state.g_n - 2
+                    else:
+                        for ball_ind in range(len(des_pipe.stack) - 1, -1, -1):
+                            if des_pipe.stack[ball_ind] != des_pipe.color:
+                                return state.g_n + len(des_pipe.stack) - ball_ind + 1
+                else:
+                    return state.g_n + 1
 
     def set_path_cost(self, cost: list):
         self.path_cost = cost

@@ -2,11 +2,6 @@
 class State:
     def __init__(self, pipes: list, parent, g_n: int, prev_action: tuple):
         self.pipes = pipes
-        # self.pipes.sort(key=lambda pipe: pipe.maximum_same_ball_color, reverse=True)
-        # print()
-        # for p in self.pipes:
-        #     print(p.maximum_same_ball_color)
-        #     print(p.stack)
         self.parent = parent
         self.g_n = g_n
         self.prev_action = prev_action
@@ -32,7 +27,6 @@ class State:
             for ball in pipe.stack:
                 colors[ball] += 1
         number_of_balls = sum(colors.values())
-        # for i in range(number_of_balls / self.pipes[0].limit):
         for color in colors:
             n = colors[color] / self.pipes[0].limit
             for pipe in self.pipes:
