@@ -63,7 +63,7 @@ class Search:
 
     @staticmethod
     def ids(prb: Problem) -> Solution:
-        print("IDS - Iterative Deppening Search")
+        print("IDS - Iterative Deepening Search")
         start_time = datetime.now()
         cutoff = 0
         while cutoff < 20:
@@ -110,7 +110,7 @@ class Search:
 
     @staticmethod
     def a_star(prb: Problem) -> Solution:
-        print("a_star - A*")
+        print("A Star - A*")
         start_time = datetime.now()
         queue = []
         state = prb.initState
@@ -118,6 +118,7 @@ class Search:
         while len(queue) > 0:
             queue.sort(key=lambda st: st.h_n + st.g_n)
             state = queue.pop(0)
+            print(f"{state.h_n} + {state.g_n} = {state.h_n + state.g_n}")
             if prb.is_goal(state):
                 return Solution(state, prb, start_time)
             neighbors = prb.successor_a_star(state)
@@ -126,5 +127,28 @@ class Search:
         return None
 
     @staticmethod
-    def ida_star(prb: Problem):
-        pass
+    def ida_star(prb: Problem) -> Solution:
+        print("ida_star - Iterative Deepening A*")
+        start_time = datetime.now()
+        state = prb.initState
+        cutoff = state.f_n()
+
+        while state.f_n() <= cutoff:
+            min_cutoff = float("inf")
+            stack = [state]
+            while len(stack) > 0:
+                state = stack.pop(-1)
+                if prb.is_goal(state):
+                    return Solution(state, prb, start_time)
+                if state.f_n() <= cutoff:
+                    neighbors = prb.successor_a_star(state)
+                    for neighbor in neighbors:
+                        if neighbor.f_n() <= cutoff:
+                            stack.append(neighbor)
+                        else:
+                            if neighbor.f_n() < min_cutoff:
+                                min_cutoff = neighbor.f_n()
+                                print(f"{min_cutoff} - {cutoff} - {neighbor.g_n} - {neighbor.h_n}")
+            cutoff = min_cutoff
+            state = prb.initState
+        return None
