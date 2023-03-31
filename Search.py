@@ -1,6 +1,7 @@
 from Solution import Solution
 from Problem import Problem
 from datetime import datetime
+import copy
 
 
 class Search:
@@ -125,6 +126,7 @@ class Search:
                 queue.append(c)
         return None
 
+    @staticmethod
     def rbfs(prb: Problem) -> Solution:
         print("RBFS - Recursive Best-First Search")
         start_time = datetime.now()
