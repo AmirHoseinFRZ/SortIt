@@ -91,6 +91,7 @@ class Search:
 
     @staticmethod
     def ucs(prb: Problem) -> Solution:
+        print("UCS - Uniform Cost Search")
         start_time = datetime.now()
         queue = []
         state = prb.initState
@@ -105,8 +106,11 @@ class Search:
                 queue.append(c)
         return None
 
+    #  Heuristic Methods
+
     @staticmethod
     def a_star(prb: Problem) -> Solution:
+        print("a_star - A*")
         start_time = datetime.now()
         queue = []
         state = prb.initState
@@ -118,7 +122,9 @@ class Search:
                 return Solution(state, prb, start_time)
             neighbors = prb.successor_a_star(state)
             for c in neighbors:
-                if prb.is_goal(c):
-                    return Solution(c, prb, start_time)
                 queue.append(c)
         return None
+
+    @staticmethod
+    def ida_star(prb: Problem):
+        pass
