@@ -62,6 +62,35 @@ class Search:
         return None
 
     @staticmethod
+    def ids(prb: Problem) -> Solution:
+        print("IDS - Iterative Deppening Search")
+        start_time = datetime.now()
+        cutoff = 0
+        while cutoff < 20:
+            visited = []
+            stack = []
+            state = prb.initState
+            stack.append(state)
+            while len(stack) > 0:
+                state = stack[-1]
+                if state.g_n <= cutoff - 1:
+                    visited.append(stack.pop(-1))
+                    neighbors = prb.successor(state)
+                    for neighbor in neighbors[::-1]:
+                        if prb.is_goal(neighbor):
+                            print(neighbor.g_n)
+                            return Solution(neighbor, prb, start_time)
+                        for item in visited:
+                            if item.__hash__() == neighbor.__hash__():
+                                break
+                        else:
+                            stack.append(neighbor)
+                else:
+                    stack.pop(-1)
+            cutoff += 1
+        return None
+
+    @staticmethod
     def ucs(prb: Problem) -> Solution:
         start_time = datetime.now()
         queue = []
