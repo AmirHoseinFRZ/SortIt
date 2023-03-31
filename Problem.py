@@ -56,6 +56,7 @@ class Problem:
                     s.change_between_two_pipe(i, j)
                     child.append(s)
         return child
+
     @staticmethod
     def print_state(state: State):
         for i in state.pipes:
@@ -91,7 +92,7 @@ class Problem:
         if src_pipe.color is None:
             if src_pipe.stack[-1] == des_pipe.color:
                 if des_pipe.is_one_color():
-                    return state.g_n - 2
+                    return state.g_n - 1
                 else:
                     for ball_ind in range(len(des_pipe.stack) - 1, -1, -1):
                         if des_pipe.stack[ball_ind] != des_pipe.color:
@@ -104,7 +105,7 @@ class Problem:
             else:
                 if src_pipe.stack[-1] == des_pipe.color:
                     if des_pipe.is_one_color():
-                        return state.g_n - 2
+                        return state.g_n - 1
                     else:
                         for ball_ind in range(len(des_pipe.stack) - 1, -1, -1):
                             if des_pipe.stack[ball_ind] != des_pipe.color:
