@@ -1,3 +1,5 @@
+import copy
+
 from Solution import Solution
 from Problem import Problem
 from datetime import datetime
@@ -128,3 +130,29 @@ class Search:
     @staticmethod
     def ida_star(prb: Problem):
         pass
+
+    @staticmethod
+    def rbfs(prb: Problem) -> Solution:
+        print("RBFS - Recursive Best-First Search")
+        start_time = datetime.now()
+        queue = []
+        state = prb.initState
+        queue.append(state)
+        while len(queue) > 0:
+            queue.sort(key=lambda st: st.h_n + st.g_n)
+            state = queue[0]
+            state2 = copy.deepcopy(state)
+            state2.g_n = float('+inf')
+            if len(queue) >= 2:
+                state2 = queue[1]
+            neighbors = prb.successor_a_star(state)
+            queue.pop()
+            x = min(neighbors, key=lambda n: n.h_n + n.g_n)
+            if x.h_n + x.g_n < (state2.h_n + state2.g_n):
+                state2 = x
+                for neighbor in neighbors:
+                    if prb.is_goal(neighbor):
+                        return Solution(neighbor, prb, start_time)
+                    queue.append(neighbor)
+        return None
+
