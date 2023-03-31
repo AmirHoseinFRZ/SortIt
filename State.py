@@ -43,3 +43,5 @@ class State:
                 h += len(pipe.stack)
         return h
 
+    def f_n(self):
+        return self.g_n + self.h_n
