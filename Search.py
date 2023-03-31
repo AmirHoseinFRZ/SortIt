@@ -30,13 +30,35 @@ class Search:
         while len(stack) > 0:
             state = stack.pop(-1)  # index 0 is bottom of stack and index -1 is top of stack
             neighbors = prb.successor(state)
-            for neighbor in neighbors[::-1]:  # the leftmost node is add first.
-                # the rightmost node is add last.
-                # we visited the rightmost node first.
+            for neighbor in neighbors[::-1]:  # the rightmost node is add first.
+                # the leftmost node is add last.
+                # we visited the leftmost node first.
                 if prb.is_goal(neighbor):
-                    print(neighbor.g_n)
                     return Solution(neighbor, prb, start_time)
                 stack.append(neighbor)
+        return None
+
+    @staticmethod
+    def modified_dfs(prb: Problem) -> Solution:
+        print("modified DFS - modified Depth First Search")
+        visited = []
+        start_time = datetime.now()
+        stack = []
+        state = prb.initState
+        stack.append(state)
+        while len(stack) > 0:
+            state = stack[-1]
+            visited.append(stack.pop(-1))
+            neighbors = prb.successor(state)
+            for neighbor in neighbors[::-1]:
+                if prb.is_goal(neighbor):
+                    return Solution(neighbor, prb, start_time)
+
+                for item in visited:
+                    if item.__hash__() == neighbor.__hash__():
+                        break
+                else:
+                    stack.append(neighbor)
         return None
 
     @staticmethod
