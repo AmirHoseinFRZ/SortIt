@@ -176,3 +176,33 @@ class Search:
             cutoff = min_cutoff
             state = prb.initState
         return None
+
+    @staticmethod
+    def bds(prb: Problem) -> Solution:
+        start_time = datetime.now()
+        goal_solution = Search.modified_dfs(prb)  # used BFS Method for get goal state and backwarding
+
+        for_hashes = {}
+        for_queue = [prb.initState]
+
+        back_hashes = {}
+        back_queue = [goal_solution.state]
+
+        while len(for_queue) > 0 and len(back_queue) > 0:
+            for_state = for_queue.pop()
+            back_state = back_queue.pop()
+            print(f"{for_state.g_n} - {back_state.g_n}")
+            forward_children = prb.successor(for_state)
+            backward_children = prb.back_successor(back_state)
+
+            for c1 in forward_children:
+                for_hashes[c1.__hash__()] = c1
+                for c2 in backward_children:
+                    if c2.__hash__() not in back_hashes:
+                        back_hashes[c2.__hash__()] = c2
+                        if c1.__hash__() == c2.__hash__():
+                            return Solution(goal_solution.state, prb, start_time)
+                        back_queue.append(c2)
+                for_queue.append(c1)
+
+        return None
