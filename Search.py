@@ -1,5 +1,3 @@
-import copy
-
 from Solution import Solution
 from Problem import Problem
 from datetime import datetime
@@ -65,7 +63,7 @@ class Search:
 
     @staticmethod
     def ids(prb: Problem) -> Solution:
-        print("IDS - Iterative Deppening Search")
+        print("IDS - Iterative Deepening Search")
         start_time = datetime.now()
         cutoff = 0
         while cutoff < 20:
@@ -112,7 +110,7 @@ class Search:
 
     @staticmethod
     def a_star(prb: Problem) -> Solution:
-        print("a_star - A*")
+        print("A Star - A*")
         start_time = datetime.now()
         queue = []
         state = prb.initState
@@ -127,7 +125,6 @@ class Search:
                 queue.append(c)
         return None
 
-    @staticmethod
     def rbfs(prb: Problem) -> Solution:
         print("RBFS - Recursive Best-First Search")
         start_time = datetime.now()
@@ -150,4 +147,30 @@ class Search:
                     if prb.is_goal(neighbor):
                         return Solution(neighbor, prb, start_time)
                     queue.append(neighbor)
+        return None
+
+    @staticmethod
+    def ida_star(prb: Problem) -> Solution:
+        print("IDA* - Iterative Deepening A*")
+        start_time = datetime.now()
+        state = prb.initState
+        cutoff = state.f_n()
+        while state.f_n() <= cutoff:
+            min_cutoff = float("inf")
+            stack = [state]
+            while len(stack) > 0:
+                state = stack.pop(-1)
+                if prb.is_goal(state):
+                    return Solution(state, prb, start_time)
+                if state.f_n() <= cutoff:
+                    neighbors = prb.successor_a_star(state)
+                    for neighbor in neighbors:
+                        if neighbor.f_n() <= cutoff:
+                            stack.append(neighbor)
+                        else:
+                            if neighbor.f_n() < min_cutoff:
+                                min_cutoff = neighbor.f_n()
+                                print(f"{min_cutoff} - {cutoff} - {neighbor.g_n} - {neighbor.h_n}")
+            cutoff = min_cutoff
+            state = prb.initState
         return None
