@@ -128,10 +128,6 @@ class Search:
         return None
 
     @staticmethod
-    def ida_star(prb: Problem):
-        pass
-
-    @staticmethod
     def rbfs(prb: Problem) -> Solution:
         print("RBFS - Recursive Best-First Search")
         start_time = datetime.now()
@@ -155,4 +151,3 @@ class Search:
                         return Solution(neighbor, prb, start_time)
                     queue.append(neighbor)
         return None
-
