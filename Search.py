@@ -78,7 +78,6 @@ class Search:
                     neighbors = prb.successor(state)
                     for neighbor in neighbors[::-1]:
                         if prb.is_goal(neighbor):
-                            print(neighbor.g_n)
                             return Solution(neighbor, prb, start_time)
                         for item in visited:
                             if item.__hash__() == neighbor.__hash__():
