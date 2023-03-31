@@ -19,6 +19,26 @@ class Search:
                 queue.append(c)
         return None
 
+    # blind searches
+    @staticmethod
+    def dfs(prb: Problem) -> Solution:
+        print("DFS - Depth First Search")
+        start_time = datetime.now()
+        stack = []
+        state = prb.initState
+        stack.append(state)
+        while len(stack) > 0:
+            state = stack.pop(-1)  # index 0 is bottom of stack and index -1 is top of stack
+            neighbors = prb.successor(state)
+            for neighbor in neighbors[::-1]:  # the leftmost node is add first.
+                # the rightmost node is add last.
+                # we visited the rightmost node first.
+                if prb.is_goal(neighbor):
+                    print(neighbor.g_n)
+                    return Solution(neighbor, prb, start_time)
+                stack.append(neighbor)
+        return None
+
     @staticmethod
     def ucs(prb: Problem) -> Solution:
         start_time = datetime.now()
@@ -52,5 +72,3 @@ class Search:
                     return Solution(c, prb, start_time)
                 queue.append(c)
         return None
-
-
